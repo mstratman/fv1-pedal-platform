@@ -3,7 +3,7 @@
 /* We're using a 24LC32A */
 // Make sure all of these match what's in the pedal's code, too.
 #define EEPROM_ADDRESS B1010000 // 1010 + 3 bits for pins 1,2,3
-#define BUFFER_SIZE 22 // It has a 32 byte page write buffer, but we use as little as possible to save space on the arduino's RAM.
+#define BUFFER_SIZE 30 // It has a 32 byte page write buffer, but we use as little as possible to save space on the arduino's RAM.
 #define PAGE_SIZE 32
 #define EEPROM_CLOCK_SPEED 400000
 

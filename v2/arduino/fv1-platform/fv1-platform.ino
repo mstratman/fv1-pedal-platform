@@ -3,24 +3,26 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9341.h"
 #include "Optima9pt7b.h"
-#include "Neb14pt7b.h"
+#include "euphorigenic14pt7b.h"
 
 #define PIN_TFT_DC 9
 #define PIN_TFT_CS 10
 
-#define PIN_BYPASS 5
+#define PIN_BYPASS 6
 
-#define PIN_BANK 6
+#define PIN_BANK1 8
+#define PIN_BANK2 7
+#define PIN_EEPROM_SHUTOFF 5
 
-#define DEBOUNCE_TIME 100
+#define DEBOUNCE_TIME 150
 
 #define PIN_ROT1 2 // 1p8t rotary switch
 #define PIN_ROT2 3
 #define PIN_ROT3 4
 
 /* We're using a 24LC32A */
-#define EEPROM_ADDRESS B1010000 // 1010 + 3 bits for pins 1,2,3
-#define EEPROM_BUFFER_SIZE 22 // It has a 32 byte page write buffer, but make this as small as possible 
+#define EEPROM_ADDRESS B1010000 // 1010 + 3 bits (000) for pins 1,2,3
+#define EEPROM_BUFFER_SIZE 30 // It has a 32 byte page write buffer, but make this as small as possible 
 #define EEPROM_PAGE_SIZE 32
 #define EEPROM_CLOCK_SPEED 400000
 
@@ -35,17 +37,19 @@
 #define BAR_TEXT_BASELINE_OFFSET 20 // this effectively controls margin below text
 #define BAR_TEXT_MAX_HEIGHT 30 // this was found through trial and error
 
-#define PROGRAM_LABEL_OFFSET 55 // trial and error, how far down to move the label text
+#define PROGRAM_LABEL_1L_OFFSET 55 // trial and error, how far down to move the label text
+#define PROGRAM_LABEL_2L_OFFSET 35 // trial and error
+#define PROGRAM_LABEL_2L_SPACING 35 // trial and error, space between first and second line
 #define PROGRAM_BG_BUFFER 20  // Space between bottom bar and top of program name section
 
 
-#define POTS_REVERSED // Comment this out if your p1-p3 aren't reversed
+//#define POTS_REVERSED // Comment this out if your p1-p3 aren't reversed
 #if defined(POTS_REVERSED)
-  const int pot_pins[] = {A2, A1, A0}; // p3, p2, p1
-  #define POT_LABEL_I(i) 2-i
+const int pot_pins[] = {A2, A1, A0}; // p3, p2, p1
+#define POT_LABEL_I(i) 2-i
 #else
-  const int pot_pins[] = {A0, A1, A2}; // p1, p2, p3
-  #define POT_LABEL_I(i) i
+const int pot_pins[] = {A0, A1, A2}; // p1, p2, p3
+#define POT_LABEL_I(i) i
 #endif
 
 
@@ -70,9 +74,10 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_TFT_CS, PIN_TFT_DC);
    We're going to read the needed labels on-the-fly when the program or bank changes. Initially it was loaded up once
    at boot, but it requires too much memory.
 */
-char labels[4][EEPROM_BUFFER_SIZE] = {
+char labels[5][EEPROM_BUFFER_SIZE] = {
   // 0: Program label
   "-",
+  " ",
   // 1-3: control labels
   "N/A",
   "N/A",
@@ -80,7 +85,13 @@ char labels[4][EEPROM_BUFFER_SIZE] = {
 };
 
 boolean bypassed = false;
-byte selected_bank = B0; // 0 is internal, 1 is ROM
+
+#define BANK_INTERNAL B11
+#define BANK_1 B01
+#define BANK_2 B10
+#define BANK_ERROR B00
+
+byte selected_bank = BANK_ERROR;
 byte selected_program = B0; // 0 to 7
 
 byte last_program = B11111111;
@@ -90,19 +101,25 @@ unsigned long last_program_debounce_time = 0;
 void drawBars(boolean force = false);
 
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   Wire.begin();
   Wire.setClock(EEPROM_CLOCK_SPEED);
+
+  analogReference(EXTERNAL);
 
   for (int i = 0; i < 3; i++) {
     pinMode(pot_pins[i], INPUT);
   }
 
+  pinMode(PIN_EEPROM_SHUTOFF, OUTPUT);
+  digitalWrite(PIN_EEPROM_SHUTOFF, HIGH);
+
   pinMode(PIN_BYPASS, INPUT_PULLUP);
   bypassed = digitalRead(PIN_BYPASS) == HIGH;
 
-  pinMode(PIN_BANK, INPUT_PULLUP);
+  pinMode(PIN_BANK1, INPUT);
+  pinMode(PIN_BANK2, INPUT);
   pinMode(PIN_ROT1, INPUT);
   pinMode(PIN_ROT2, INPUT);
   pinMode(PIN_ROT3, INPUT);
@@ -113,7 +130,7 @@ void setup() {
 
 
   byte bank = readBank();
-  byte program = readProgram();  
+  byte program = readProgram();
   last_program = program;
   last_bank = bank;
   selectProgram(bank, program, false);
@@ -130,7 +147,9 @@ void loop() {
 }
 
 byte readBank() {
-  return (byte)(digitalRead(PIN_BANK) == LOW ? B0 : B1);
+  byte bank1 = (byte)(digitalRead(PIN_BANK1) == LOW ? BANK_1 : B0);
+  byte bank2 = (byte)(digitalRead(PIN_BANK2) == LOW ? BANK_2 : B0);
+  return (byte)(bank1 | bank2);
 }
 byte readProgram() {
   // Program is 0-7 depending on the combination of these 3 inputs.
@@ -162,6 +181,17 @@ void checkProgram() {
   }
 
   if ((selected_bank != bank || selected_program != program) && (millis() - last_program_debounce_time) > DEBOUNCE_TIME) {
+    if (selected_bank != bank) {
+      //Serial.println("Switching to internal ROM");
+      // Temporarily swap the FV-1 over to its internal ROM so it reads the program from the newly selected bank
+      digitalWrite(PIN_EEPROM_SHUTOFF, LOW);
+      delay(20);
+      digitalWrite(PIN_EEPROM_SHUTOFF, HIGH);
+      delay(5);
+      //Serial.println("Switched back to external");
+    }
+
+    Serial.print("program="); Serial.println(program); Serial.print("bank="); Serial.println(bank);
     selectProgram(bank, program, true);
   }
 
@@ -169,6 +199,8 @@ void checkProgram() {
   last_bank = bank;
 }
 void selectProgram(byte bank, byte program, boolean draw) {
+  //Serial.print("Bank="); Serial.println(bank);
+  //Serial.print("Program="); Serial.println(program);
   selected_bank = bank;
   selected_program = program;
 
@@ -191,7 +223,7 @@ void setupScreen() {
 }
 void _drawBypassed() {
   tft.fillScreen(BG_COLOR);
-  tft.setFont(&Neb14pt7b);
+  tft.setFont(&euphorigenic14pt7b);
   tft.setCursor(centerXForText("BYPASSED"), 120);
   tft.println("BYPASSED");
   // TODO: Do a nice graphic or animation?
@@ -207,26 +239,36 @@ void drawLabels() {
     tft.fillRect(0, y, TFT_WIDTH, BAR_TEXT_MAX_HEIGHT, BG_COLOR);
 
     tft.setCursor(2, y + BAR_TEXT_BASELINE_OFFSET);
-    tft.print(labels[POT_LABEL_I(i + 1)]);
+    // +2 to offset the program name
+    tft.print(labels[POT_LABEL_I(i + 2)]);
   }
 
   // Fill in the bottom of the screen
   int y = BAR_Y_START + 3 * BAR_SECTION_TOTAL_HEIGHT + PROGRAM_BG_BUFFER;
   tft.fillRect(0, y, TFT_WIDTH, TFT_HEIGHT - y, PROGRAM_BG_COLOR);
-  
-  tft.setFont(&Neb14pt7b);
-  tft.setTextColor(PROGRAM_LABEL_COLOR, PROGRAM_BG_COLOR);
 
   // Write the program name, centered.
+
+  tft.setFont(&euphorigenic14pt7b);
+  tft.setTextColor(PROGRAM_LABEL_COLOR, PROGRAM_BG_COLOR);
+
   tft.setTextWrap(true);
 
-  int16_t  x_ignored, y_ignored;
-  uint16_t w, h;
-  tft.getTextBounds(labels[0], 0, y, &x_ignored, &y_ignored, &w, &h);
+  boolean has_2_lines = (strlen(labels[1]) > 0);
 
-  int x = w < TFT_WIDTH ? (TFT_WIDTH - w) / 2 : 0;
-  tft.setCursor(centerXForText(labels[0]), y + PROGRAM_LABEL_OFFSET);
+  y += (has_2_lines ? PROGRAM_LABEL_2L_OFFSET : PROGRAM_LABEL_1L_OFFSET);
+
+  // Line 1
+  tft.setCursor(centerXForText(labels[0]), y);
   tft.print(labels[0]);
+
+  // Line 2
+  if (has_2_lines) {
+    y += PROGRAM_LABEL_2L_SPACING;
+    tft.setCursor(centerXForText(labels[1]), y);
+    tft.print(labels[1]);
+  }
+
   tft.setTextWrap(false);
 }
 
@@ -251,9 +293,8 @@ void drawBars(boolean force = false) {
     } else {
       last_pot_val[i] = pot_val;
     }
-    
-    // 0 - 312 on usb, 0-...736 on 9V wall wart.
-    float percent = ((float)pot_val / 740);
+
+    float percent = ((float)pot_val / 1023);
     if (percent > 1) {
       percent = 1;
     }
@@ -276,11 +317,24 @@ int centerXForText(char *text) {
 
 /* This pulls labels off of EEPROM based on selected_bank and selected_program. */
 void _setLabelsForSelectedProgram() {
-  // 32 == 8 programs per bank * 4 strings per program.
-  // 4 == 4 strings per program
+  //Serial.println("Setting labels");
+  //Serial.print("selected_bank="); Serial.println(selected_bank);
+  //Serial.print("internal="); Serial.println(BANK_INTERNAL);
+  //Serial.print("error="); Serial.println(BANK_ERROR);
+
+  if (selected_bank == BANK_INTERNAL || selected_bank == BANK_ERROR) {
+    _setLabelsForROM();
+  } else {
+    _setLabelsForExternalEEPROM();
+  }
+}
+
+void _setLabelsForExternalEEPROM() {
+  //Serial.println("Setting labels for EEPROM");
+  // 5 == 5 strings per program
   /* (starting position for bank) + (starting position for program) */
-  unsigned int base_address = (EEPROM_PAGE_SIZE * 32 * selected_bank) + (EEPROM_PAGE_SIZE * 4 * selected_program);
-  for (int i = 0; i < 4; i++) {
+  unsigned int base_address = (EEPROM_PAGE_SIZE * 5 * selected_program);
+  for (int i = 0; i < 5; i++) {
     unsigned int address = base_address + EEPROM_PAGE_SIZE * i;
     Wire.beginTransmission(EEPROM_ADDRESS);
     Wire.write((int)(address >> 8)); // MSB
@@ -293,10 +347,74 @@ void _setLabelsForSelectedProgram() {
       if (Wire.available()) {
         data = Wire.read();
         labels[i][j] = data;
+        //Serial.write(data);
         if (data == '\0') {
           break;
         }
       }
     }
+    //Serial.println("");
+  }
+}
+
+void _setLabelsForROM() {
+  //Serial.println("Setting labels for internal rom");
+  switch (selected_program) {
+    case 0:
+      strcpy(labels[0], "Chorus Reverb\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Reverb Mix\0");
+      strcpy(labels[3], "Chorus Rate\0");
+      strcpy(labels[4], "Chorus Mix\0");
+      break;
+    case 1:
+      strcpy(labels[0], "Flange Reverb\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Reverb Mix\0");
+      strcpy(labels[3], "Flange Rate\0");
+      strcpy(labels[4], "Flange Mix\0");
+      break;
+    case 2:
+      strcpy(labels[0], "Tremolo Reverb\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Reverb Mix\0");
+      strcpy(labels[3], "Tremolo Rate\0");
+      strcpy(labels[4], "Tremolo Mix\0");
+      break;
+    case 3:
+      strcpy(labels[0], "Pitch Shift\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Pitch +/- 4 semitones\0");
+      strcpy(labels[3], "N/A\0");
+      strcpy(labels[4], "N/A\0");
+      break;
+    case 4:
+      strcpy(labels[0], "Pitch Echo\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Pitch Shift\0");
+      strcpy(labels[3], "Echo Delay\0");
+      strcpy(labels[4], "Echo Mix\0");
+      break;
+    case 5:
+      strcpy(labels[0], "Unavailable\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "-\0");
+      strcpy(labels[3], "-\0");
+      strcpy(labels[4], "-\0");
+      break;
+    case 6:
+      strcpy(labels[0], "Room Reverb 1\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Time\0");
+      strcpy(labels[3], "HF Filter\0");
+      strcpy(labels[4], "LF Filter\0");
+      break;
+    case 7:
+      strcpy(labels[0], "Room Reverb 2\0");
+      strcpy(labels[1], "\0");
+      strcpy(labels[2], "Time\0");
+      strcpy(labels[3], "HF Filter\0");
+      strcpy(labels[4], "LF Filter\0");
+      break;
   }
 }
