@@ -170,7 +170,7 @@ void writeEEPROMPage(unsigned int address, char *data)
     // Serial.println(i);
     // Serial.println(data[i]);
     Wire.write((byte) data[i]);
-    if (data[i] == '\0') {
+    if (data[i] == '\\0') {
       break;
     }
     i++;
