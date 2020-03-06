@@ -3,7 +3,8 @@
     "name": "startbootstrap-agency",
     "version": "5.2.2",
     "scripts": {
-        "start": "node_modules/.bin/gulp watch"
+        "dev": "node_modules/.bin/gulp watch",
+        "build": "node_modules/.bin/gulp build"
     },
     "description": "Agency is a one page HTML theme for Bootstrap.",
     "keywords": [
@@ -41,6 +42,7 @@
         "gulp-autoprefixer": "7.0.0",
         "gulp-clean-css": "4.2.0",
         "gulp-header": "2.0.9",
+        "gulp-nunjucks": "^5.0.1",
         "gulp-plumber": "^1.2.1",
         "gulp-rename": "1.4.0",
         "gulp-sass": "4.0.2",

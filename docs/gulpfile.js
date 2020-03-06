@@ -12,9 +12,11 @@ const plumber = require("gulp-plumber");
 const rename = require("gulp-rename");
 const sass = require("gulp-sass");
 const uglify = require("gulp-uglify");
+const nunjucks = require('gulp-nunjucks');
+
 
 // BrowserSync
-function browserSync(done) {
+function browserSyncStart(done) {
   browsersync.init({
     server: {
       baseDir: "./"
@@ -99,17 +101,27 @@ function js() {
     .pipe(browsersync.stream());
 }
 
+function html() {
+  return gulp
+    .src("./nunjucks/*.html")
+    .pipe(nunjucks.compile({}))
+    .pipe(gulp.dest('./'));
+}
+
+
+
 // Watch files
 function watchFiles() {
   gulp.watch("./scss/**/*", css);
   gulp.watch(["./js/**/*", "!./js/**/*.min.js"], js);
+  gulp.watch("./nunjucks/**/*.html", html);
   gulp.watch("./**/*.html", browserSyncReload);
 }
 
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
-const build = gulp.series(vendor, gulp.parallel(css, js));
-const watch = gulp.series(build, gulp.parallel(watchFiles, browserSync));
+const build = gulp.series(vendor, gulp.parallel(css, js, html));
+const watch = gulp.series(build, gulp.parallel(watchFiles, browserSyncStart));
 
 // Export tasks
 exports.css = css;
@@ -117,5 +129,6 @@ exports.js = js;
 exports.clean = clean;
 exports.vendor = vendor;
 exports.build = build;
+exports.html = html;
 exports.watch = watch;
 exports.default = build;
