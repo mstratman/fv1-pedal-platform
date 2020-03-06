@@ -1,6 +1,12 @@
+@import "base/mixins.scss";
 
 .TODO {
   background-color: #fff700;
+}
+
+.subheading {
+  font-style: italic;
+  @include serif-font;
 }
 
 .bg-teal {
@@ -24,4 +30,9 @@
 .caption {
   text-align: center;
   font-size: 0.85rem;
+}
+
+.service-heading {
+  margin: 15px 0;
+  text-transform: none;
 }
