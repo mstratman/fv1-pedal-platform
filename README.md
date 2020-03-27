@@ -1,3 +1,3 @@
-See v1  and v2 directories
+Coming soon
 
-TODO: Document this further
+TODO: Note v1
