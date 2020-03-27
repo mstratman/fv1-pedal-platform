@@ -1,0 +1,38 @@
+@import "base/mixins.scss";
+
+.TODO {
+  background-color: #fff700;
+}
+
+.subheading {
+  font-style: italic;
+  @include serif-font;
+}
+
+.bg-teal {
+  background-color: #83d3c9;
+  color: #fff;
+}
+
+.navbar-brand {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.intro-lead-in {
+  font-weight: 400;
+}
+
+.normal-style {
+  font-style: normal !important;
+}
+
+.caption {
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.service-heading {
+  margin: 15px 0;
+  text-transform: none;
+}
