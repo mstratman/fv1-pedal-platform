@@ -41,7 +41,7 @@ To create these banks I do the following:
 
 ## "EEPROM Helper" tool
 
-To help streamline this process I have a really simple tool I use: [eeprom helper](https://github.com/mstratman/fv1-pedal-platform/tree/master/v2/eeprom-helper]
+To help streamline this process I have a really simple tool I use: [eeprom helper](https://github.com/mstratman/fv1-pedal-platform/tree/master/v2/eeprom-helper)
 
 It's just a simple javascript page that lets me check which programs I'll be burning, then it does 2 things:
 
