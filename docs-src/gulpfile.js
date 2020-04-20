@@ -101,10 +101,27 @@ function js() {
     .pipe(browsersync.stream());
 }
 
-function html() {
+const nunjucksOptions = {
+  tags: {
+    blockStart: '<%',
+    blockEnd: '%>',
+    variableStart: '<$',
+    variableEnd: '$>',
+    commentStart: '<#',
+    commentEnd: '#>'
+  }
+};
+
+function htmlDev() {
   return gulp
     .src("./nunjucks/*.html")
-    .pipe(nunjucks.compile({}))
+    .pipe(nunjucks.compile({production: false}, nunjucksOptions))
+    .pipe(gulp.dest('../docs/'));
+}
+function htmlProd() {
+  return gulp
+    .src("./nunjucks/*.html")
+    .pipe(nunjucks.compile({production: true}, nunjucksOptions))
     .pipe(gulp.dest('../docs/'));
 }
 
@@ -120,21 +137,24 @@ function img() {
 function watchFiles() {
   gulp.watch("./scss/**/*", css);
   gulp.watch(["./js/**/*", "!./js/**/*.min.js"], js);
-  gulp.watch("./nunjucks/**/*.html", html);
+  gulp.watch("./nunjucks/**/*.html", htmlDev);
   gulp.watch("./**/*.html", browserSyncReload);
 }
 
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
-const build = gulp.series(vendor, gulp.parallel(css, js, html, img));
-const watch = gulp.series(build, gulp.parallel(watchFiles, browserSyncStart));
+const buildProd = gulp.series(vendor, gulp.parallel(css, js, htmlProd, img));
+const buildDev = gulp.series(vendor, gulp.parallel(css, js, htmlDev, img));
+const watch = gulp.series(buildDev, gulp.parallel(watchFiles, browserSyncStart));
 
 // Export tasks
 exports.css = css;
 exports.js = js;
 exports.clean = clean;
 exports.vendor = vendor;
-exports.build = build;
-exports.html = html;
+exports.buildDev = buildDev;
+exports.build =  buildProd;
+exports.htmlProd = htmlProd;
+exports.htmlDev = htmlDev;
 exports.watch = watch;
-exports.default = build;
+exports.default = buildProd;
