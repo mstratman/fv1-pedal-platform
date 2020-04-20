@@ -19,6 +19,7 @@
 
     <div class="warning" v-show="warnNoControls.length > 0">
       <h3>Missing controls</h3>
+      <small>Add them to <a target="_blank" href="https://github.com/mstratman/fv1-programs/blob/master/programs.js">programs.js and submit a pull request</a> (or <a href="mailto:mark@mas-effects.com">email your change to Mark</a>)</small>
       <ul>
         <li v-for="p in warnNoControls" :key="p.idx">{{p.name}}</li>
       </ul>
@@ -128,7 +129,7 @@ export default {
 #define NUM_PROGRAMS 8 // 8 programs per bank
 #define NUM_BANKS 1   // one bank per eeprom. V1 of the pedal also stored the internal ROM bank on here.
 char *labels[] = {
-  ${labels().join(",")}
+  ${labels().join(",\n")}
 };
 
 
