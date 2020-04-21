@@ -47,6 +47,7 @@ var programs = [
   {
     id: "aa",
     name: "Plate Reverb",
+    fav: true,
     description: "By spinsemi",
     categories: ["Reverb"],
     controls: ["Pre-delay", "Time", "Damping"],
@@ -80,6 +81,7 @@ var programs = [
   {
     id: "ae",
     name: "Hall Reverb",
+    fav: true,
     categories: ["Reverb"],
     controls: ["Pre-delay", "Reverb time", "Damping"],
     file: "spinsemi/3K_V1_0_Hall.spn",
@@ -88,6 +90,7 @@ var programs = [
   {
     id: "af",
     name: "Room Reverb",
+    fav: true,
     categories: ["Reverb"],
     controls: ["Pre-delay", "Reverb time", "Damping"],
     file: "spinsemi/3K_V1_1_Room.spn",
@@ -118,6 +121,7 @@ var programs = [
   },
   {
     id: "aj",
+    fav: true,
     name: "DROLO Flanger",
     description: "This is an all-around great flanger, that gives you a wide 'Range' and 'Feedback' so you can be as practical or out-of-this-world as you'd like",
     categories: ["Flanger"],
@@ -639,6 +643,7 @@ var programs = [
   {
     id: "bz",
     name: "Spacedash",
+    description: "I'm not sure what this is doing it, but it's pretty cool.",
     categories: ["Other", "Wild"],
     controls: ["Intensity", "Rate", "Mix"],
     file: "madbeanpedals/spacedash.spn",
@@ -942,15 +947,22 @@ var app = new Vue({
     showCategory: {},
     showProgram: {},
     showRom: false,
+    showSimpler: false,
+    showAdvanced: false,
+    showCartContents: false,
+    showCode: false,
+    showCopied: false,
+    showDecoder: false,
 
-    banksOrdered: [],
-    banksById: {},
+    decoderCode: "",
+
+    cartOrdered: [],
+    cartById: {},
 
     message: 'Hello Vue!',
     programs: programs,
     romPrograms: rom_programs,
     categories: categories,
-    mode: 'list',
   },
   mounted: function() {
     this.showLoading = false;
@@ -973,10 +985,6 @@ var app = new Vue({
     */
   },
   methods: {
-    pickMode: function(mode) {
-      this.mode = mode;
-      document.getElementById("builder-top").scrollIntoView();
-    },
     programsInCategory: function(cat) {
       var len = this.programs.length;
       var rv = [];
@@ -988,9 +996,15 @@ var app = new Vue({
       }
       return rv;
     },
-    addProgram: function(programId) {
-      this.$set(this.banksById, programId, true);
-      this.banksOrdered.push(programId);
+    addProgram: function(program) {
+      this.$set(this.cartById, program.id, true);
+      this.cartOrdered.push(program);
+    },
+    removeProgram: function(program) {
+      this.$set(this.cartById, program.id, false);
+      this.cartOrdered = this.cartOrdered.filter(function(p) {
+        return p.id != program.id;
+      });
     },
     toggleCategory: function(cat) {
       var val = this.showCategory[cat] || false;
@@ -1001,7 +1015,81 @@ var app = new Vue({
       var val = this.showProgram[key] || false;
       this.$set(this.showProgram, key, !val);
     },
+
+    showCart: function() {
+      this.showCartContents = true;
+    },
+    hideCart: function() {
+      this.showCartContents = false;
+    },
+
+    showCodeAndScroll: function() {
+      this.showCode = true;
+
+      this.$nextTick(function() {
+        var div = document.getElementById("cart-contents");
+        div.scrollTop = div.scrollHeight;
+      });
+    },
+
+    copyCheckoutCode: function() {
+      var input = document.getElementById("checkout-code");
+      input.select();
+      input.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+
+      this.showCopied = true;
+    },
   },
+  computed: {
+    numBanks: function() {
+      return Math.ceil(this.numPrograms / 8);
+    },
+    numPrograms: function() {
+      return this.cartOrdered.length;
+    },
+    numSlotsLeft: function() {
+      return (this.numBanks * 8) - this.numPrograms;
+    },
+    checkoutCode: function() {
+      var rv = "";
+      var len = this.cartOrdered.length;
+      for (var i = 0; i < len; i++) {
+        rv += this.cartOrdered[i].id;
+      }
+      return rv;
+    },
+    decoderPrograms: function() {
+      // This is expensive, by design, since only I'll be using it.
+      // i.e. don't bog down everyone elses' experience by creating
+      // p_by_id outside of here.
+      var rv = [];
+      if (this.decoderCode) {
+        var codes = this.decoderCode.match(/.{1,2}/g);
+        var p_by_id = {};
+        for (var i = 0; i < this.programs.length; i++) {
+          var p = this.programs[i];
+          p_by_id[p.id] = p;
+        }
+        for (var i = 0; i < codes.length; i++) {
+          var p = p_by_id[codes[i]];
+          if (p) {
+            rv.push(p);
+          } else {
+            rv.push({file: "ERROR", id: "ERROR", name: "You found my (not-so-secret) decoder."});
+          }
+        }
+      }
+      return rv;
+    },
+  },
+  watch: {
+    cartOrdered: function() {
+      if (this.cartOrdered.length == 0) {
+        this.showCartContents = false;
+      }
+    }
+  }
 });
 
 function screenWidth() {
