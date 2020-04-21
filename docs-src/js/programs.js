@@ -8,6 +8,7 @@ var categories = [
   "Chorus",
   "Octave",
   "Pitch",
+  "Distortion",
   "Other",
   "Wild",
   "Bass"
@@ -749,14 +750,6 @@ var programs = [
     application: "Code snippet",
   },
   {
-    id: "bM",
-    name: "Reverse delay",
-    description: "Simplified part of A+ Paradox delay",
-    controls: ["-", "Delay", "Feedback"],
-    categories: ["Delay","Wild"],
-    file: "afx_reverse_delay.spn",
-  },
-  {
     id: "bN",
     name: "Aliaser",
     categories: ["Other"],
@@ -776,6 +769,14 @@ var programs = [
     categories: ["Pitch"],
     controls: ["Program select", "Cross fade", "Wet / dry mix"],
     file: "multipitch.spn",
+  },
+  {
+    id: "bM",
+    name: "Reverse delay",
+    description: "Simplified part of A+ Paradox delay",
+    controls: ["-", "Delay", "Feedback"],
+    categories: ["Delay","Wild"],
+    file: "afx_reverse_delay.spn",
   },
   {
     id: "bQ",
