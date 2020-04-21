@@ -129,7 +129,7 @@ export default {
 #define NUM_PROGRAMS 8 // 8 programs per bank
 #define NUM_BANKS 1   // one bank per eeprom. V1 of the pedal also stored the internal ROM bank on here.
 char *labels[] = {
-  ${labels().join(",")}
+  ${labels().join(",\n")}
 };
 
 

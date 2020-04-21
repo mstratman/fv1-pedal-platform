@@ -1,0 +1,271 @@
+<% set title="Programs for the FV-1 guitar pedal, Mimir's Well" %>
+<% extends "partials/template.html" %>
+
+<% block body %>
+  <section class="page-section bg-dark text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col text-center mt-3">
+          <h1 class="text-uppercase">Programs for Mimir's Well</h2>
+          <div class="intro-lead-in">Bank Builder</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-section" id="bank-builder">
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col-12">
+          <h2>Bank Builder: Program Selection</h2>
+          <p>Your Mimir's Well pedal is 23 pedals in one. You can even <a href="https://mas-effects.square.site/product/bank-of-8-extra-programs-for-mimir-s-well/4?cp=true&sa=true&sbp=false&q=false" target="_blank">buy extra banks (only $2/each)</a> to expand your collection.
+          It comes with <a href="#rom-programs" @click="showRom = !showRom">7 great built-in programs <small>(click to view)</small></a>, and you can <strong>use this page to choose up to 16 more</strong> custom ones.</p>
+          <p>Feel free to pick more than 16, but just be sure to buy the extra bank(s) to hold them.</p>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-12 text-center">
+          <button class="btn btn-outline-info btn-sm" @click.prevent="showSimpler=!showSimpler"><i class="fas fa-question-circle"></i> Want something simpler?</button>
+          ...or...
+          <button class="btn btn-outline-info btn-sm" @click.prevent="showAdvanced=!showAdvanced"><i class="fas fa-cogs"></i> More advanced?</button>
+        </div>
+      </div>
+
+      <div class="row" v-show="showSimpler">
+        <div class="col-12">
+          <h4 class="text-muted">Simpler: Pre-built Banks</h4>
+          <p><a href="mailto:mark@mas-effects.com">Email mark@mas-effects.com</a> and tell me what sort of collection you'd like to see and I can put together some banks for you.</p>
+        </div>
+      </div>
+
+      <div class="row" v-show="showAdvanced">
+        <div class="col-12">
+          <h4 class="text-muted">Advanced</h4>
+          <h6 class="text-muted">Even more banks</h6>
+          <p>You can find even more programs by going to this master list: <a target="_blank" href="https://mstratman.github.io/fv1-programs/">https://mstratman.github.io/fv1-programs/</a>.</p>
+          <p>Alternatively, if you find or make other programs you'd like added to your banks, that's not a problem.</p>
+          <p>Simply <a href="mailto:mark@mas-effects.com">email mark@mas-effects.com</a> and I'll use them when making your EEPROMs.</p>
+          <h6 class="text-muted">Burn your own EEPROMs</h6>
+          <p>I've also posted some instructions to help you flash your own EEPROM banks: <a href="https://github.com/mstratman/fv1-pedal-platform/blob/master/README.md" target="_blank">https://github.com/mstratman/fv1-pedal-platform/blob/master/README.md</a></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="program-list" class="container">
+
+      <div v-if="screenWidth < 770">
+        <div class="alert alert-danger mt-4" role="alert">
+          <h4 class="alert-heading">Screen Too Small!</h4>
+          <!--
+          <p>Using this page on a small screen is not recommended, as it'll be very hard to view the table below to compare programs. I recommend using a computer or tablet instead of a mobile phone.</p>
+          <p>This page should still work fine if you continue, but be sure to <strong>scroll left and right</strong> on the table to see all 3 controls for each program.</p>
+          -->
+          <p>Be sure to <strong>scroll left and right</strong> on the table to see all 3 controls for each program. <small>(Or use a computer with a bigger screen)</small></p>
+        </div>
+      </div>
+
+      <div v-show="showLoading" class="row">
+        <div class="col-12 text-center">
+          <div class="loading">
+            <i class="fas fa-hourglass-start"></i>
+            Loading
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div class="mt-4">
+            <small>
+              <strong><i class="fas fa-star text-warning" title="MAS Favorite"></i> <span class="text-warning">MAS Favorites</span></strong> are pedals I especially enjoy playing, and are good safe bets within each category.
+            </small>
+          </div>
+
+          <a id="rom-programs" class="anchor"></a>
+          <div class="category">
+            <div class="category-heading" @click="showRom = !showRom" :class="{open: showRom}">
+              <h3 class="link">Built-in Programs</h3>
+            </div>
+          </div>
+          <div class="table-responsive" v-show="showRom">
+            <p class="ml-2"><small><em>These aren't clickable since you already have them. <a href="mailto:mark@mas-effects.com">Email me</a> if you really want some of these on your banks though</em></small></p>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Knob 1</th>
+                  <th>Knob 2</th>
+                  <th>Knob 3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="p in romPrograms">
+                  <td>
+                    {{p.name}}
+                  </td>
+                  <td>{{p.controls[0]}}</td>
+                  <td>{{p.controls[1]}}</td>
+                  <td>{{p.controls[2]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="category" v-for="cat in categories">
+            <div class="category-heading" @click="toggleCategory(cat)" :class="{open: showCategory[cat]}">
+              <h3 class="link">{{cat}}</h3>
+            </div>
+            <div class="program-list table-responsive" v-show="showCategory[cat]">
+              <p class="ml-2"><small><em>Click to add to your bank(s)</em></small></p>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Knob 1</th>
+                    <th>Knob 2</th>
+                    <th>Knob 3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <template v-for="p in programsInCategory(cat)">
+                    <tr @click="toggleProgram(cat, p.id)" :class="{'program-row': true, 'in-bank': cartById[p.id]}">
+                      <td>
+                        <i v-if="p['fav']" class="fas fa-star text-warning" title="MAS Favorite"></i>
+                        {{p.name}}
+                        <span v-if="p['description']" class="text-secondary"><br><small>(more info...)</small></span>
+                      </td>
+                      <template v-if="p['controls']">
+                        <td>{{p.controls[0]}}</td>
+                        <td>{{p.controls[1]}}</td>
+                        <td>{{p.controls[2]}}</td>
+                      </template>
+                      <template v-else>
+                        <td>?</td>
+                        <td>?</td>
+                        <td>?</td>
+                      </template>
+                    </tr>
+                    <tr>
+                      <td colspan="4" v-show="showProgram[cat + p.id]" :class="{'details': true, 'in-bank': cartById[p.id]}">
+                        <p>{{p.description}}</p>
+                        <div>
+                          <template  v-if="cartById[p.id]">
+                            <button type="button" class="btn btn-outline-primary" disabled>Added</button>
+                            &nbsp;
+                            <a href="#" @click.prevent="removeProgram(p)">Remove</a>
+                          </template>
+                          <button v-else type="button" class="btn btn-primary" @click.prevent="addProgram(p)">Add to bank</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <transition name="cart-trigger">
+      <a href="#" class="cart-trigger" v-show="cartOrdered.length > 0 && ! showCartContents" @click.prevent="showCart">
+          <i class="fas fa-shopping-basket"></i>
+          <span class="count">{{numPrograms}}</span>
+          <template v-if="false">
+            programs
+            <br>
+            <span class="count">{{numBanks}}</span>
+            bank<template v-if="numBanks > 1">s</template>
+          </template>
+      </a>
+    </transition>
+    <transition name="cart-contents">
+      <div class="cart-contents" id="cart-contents" v-show="cartOrdered.length > 0 && showCartContents">
+        <i class="pointer fas fa-window-close" @click.prevent="hideCart"></i>
+        <div class="p-2">
+
+          <div v-for="(p,i) in cartOrdered">
+            <div v-if="i % 8 == 0">
+              <h6>Bank {{(i / 8) + 1}}</h6>
+            </div>
+            <i class="text-danger mr-2 pointer fas fa-trash-alt" title="Remove from bank" @click.prevent="removeProgram(p)"></i>
+            <small>{{i % 8 + 1}}:</small>
+            {{p.name}}
+          </div>
+
+          <!-- placeholders to indicate slots remaining -->
+          <div v-for="i in numSlotsLeft">
+            <i class="text-secondary mr-2 fas fa-trash-alt" title="Remove from bank"></i>
+            <small>{{(8 - numSlotsLeft) + i}}:</small>
+          </div>
+
+          <!-- bank placeholder to indicate you can get more than just the one(s) you already have -->
+          <div v-show="numSlotsLeft == 0">
+            <h6>Bank {{numBanks + 1}}</h6>
+            <small><em>Add more programs if you need another bank</em></small>
+          </div>
+
+        </div>
+        <div class="text-center p-2">
+          <button v-show="!showCode" @click.prevent="showCodeAndScroll" class="btn btn-sm btn-primary">Get These!</button>
+          <div v-show="showCode">
+
+            <!-- this seems redundant, but I'm not yet sure. -->
+            <div v-show="false && numSlotsLeft > 0" class="alert alert-warning" role="alert">
+              Bank {{Math.ceil(numPrograms / 8)}}
+              can <small><em>(optionally)</em></small> hold
+              {{numSlotsLeft}}
+              more programs
+            </div>
+
+            <p>
+              <small>
+                <strong>Copy the following code</strong>
+                and paste it into checkout when purchasing the 
+                <a target="_blank" href="https://mas-effects.square.site/product/mimirs-well/2?cp=true&sa=false&sbp=false&q=false&category_id=3">Mimir's Well</a>
+                pedal, or
+                <a target="_blank" href="https://mas-effects.square.site/product/bank-of-8-extra-programs-for-mimir-s-well/4?cp=true&sa=false&sbp=false&q=false&category_id=3">extra banks</a>.
+              </small>
+            </p>
+            <p><small>You can also email this code to <a href="mailto:mark@mas-effects.com">mark@mas-effects.com</a> before or after you purchase.</small></p>
+            <div>
+              <button class="btn btn-primary" @click.prevent="copyCheckoutCode">Copy Code</button>
+              <br>
+              <input id="checkout-code" type="text" :value="checkoutCode" class="form-control form-control-sm">
+              <span v-if="showCopied" class="text-success"><small>Copied!</small></span>
+            </div>
+          </div>
+          <button @click.prevent="hideCart" class="btn btn-sm btn-outline-secondary">Close</button>
+        </div>
+      </div>
+    </transition>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="text-center">
+            <i class="fas fa-music" @click="showDecoder = !showDecoder"></i>
+          </div>
+          <div v-if="showDecoder" class="text-center">
+            <input type="text" v-model="decoderCode">
+            <ol>
+              <li v-for="p in decoderPrograms">
+                <code>{{p.file}}</code> | {{p.name}}
+              </li>
+            </ol>
+          </div>
+
+  </section>
+
+  <% if production %>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+  <% else %>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <% endif %>
+  <script src="js/programs.min.js"></script>
+  <% endblock %>
