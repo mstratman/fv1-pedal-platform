@@ -966,6 +966,16 @@ var app = new Vue({
     categories: categories,
   },
   mounted: function() {
+    var code = this.getCodeParam();
+    if (code) {
+      this.cartOrdered = this.programsFromCode(code);
+      var len = this.cartOrdered.length;
+      for (var i = 0; i < len; i++) {
+        var p = this.cartOrdered[i];
+        this.cartById[p.id] = p;
+      }
+    }
+
     this.showLoading = false;
     /* Just for checking to make sure the program data above is complete and comprehensive.
     var len = this.programs.length;
@@ -1041,6 +1051,37 @@ var app = new Vue({
 
       this.showCopied = true;
     },
+
+    getCodeParam: function() {
+      var url = window.location.href;
+      var regex = new RegExp('[?&]code(=([^&#]*)|&|#|$)');
+      var results = regex.exec(url);
+      if (!results) return "";
+      if (!results[2]) return "";
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
+
+    programsFromCode: function(code) {
+      // This is expensive, by design, since it'll be rarely used.
+      // i.e. don't bog down everyone elses' experience by creating
+      // p_by_id outside of here.
+      var rv = [];
+      var codes = code.match(/.{1,2}/g);
+      var p_by_id = {};
+      for (var i = 0; i < this.programs.length; i++) {
+        var p = this.programs[i];
+        p_by_id[p.id] = p;
+      }
+      for (var i = 0; i < codes.length; i++) {
+        var p = p_by_id[codes[i]];
+        if (p) {
+          rv.push(p);
+        } else {
+          return [];
+        }
+      }
+      return rv;
+    },
   },
   computed: {
     numBanks: function() {
@@ -1066,19 +1107,9 @@ var app = new Vue({
       // p_by_id outside of here.
       var rv = [];
       if (this.decoderCode) {
-        var codes = this.decoderCode.match(/.{1,2}/g);
-        var p_by_id = {};
-        for (var i = 0; i < this.programs.length; i++) {
-          var p = this.programs[i];
-          p_by_id[p.id] = p;
-        }
-        for (var i = 0; i < codes.length; i++) {
-          var p = p_by_id[codes[i]];
-          if (p) {
-            rv.push(p);
-          } else {
-            rv.push({file: "ERROR", id: "ERROR", name: "You found my (not-so-secret) decoder."});
-          }
+        rv = this.programsFromCode(this.decoderCode);
+        if (rv.length == 0) {
+          rv.push({file: "ERROR", id: "ERROR", name: "You found my (not-so-secret) decoder."});
         }
       }
       return rv;
