@@ -752,6 +752,7 @@ var programs = [
   {
     id: "bN",
     name: "Aliaser",
+    controls: ["Sample rate", "-", "-"],
     categories: ["Other"],
     file: "aliaser.spn",
   },
