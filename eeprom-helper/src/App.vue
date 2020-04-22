@@ -1,13 +1,19 @@
 <template>
   <div id="app">
     <h2>Choose 1-8 programs</h2>
+    <label><input v-model="showFile" type="checkbox">  Show filename</label>
 
-    <label for="filter">Filter: <input type="text" id="filter" v-model="filter"/></label>
+    <div>
+      <label for="filter">Filter: <input type="text" id="filter" v-model="filter"/></label>
+    </div>
 
     <div v-for="p in filteredPrograms" :key="p.idx">
       <label :for="`check${p.idx}`">
         <input type="checkbox" :id="`check${p.idx}`" :value="p.idx" v-model="selected"/>
         {{p.name}}
+        <span v-if="showFile && p['download'] && p['download']['spn']" style="margin-left: 2rem;">
+          <code>{{p['download']['spn']['file']}}</code>
+        </span>
       </label>
     </div>
 
@@ -63,6 +69,7 @@ export default {
       filter: '',
       programs: addIndex(programs),
       selected: [],
+      showFile: false,
     }
   },
   computed: {
@@ -95,9 +102,11 @@ export default {
             controls.length=3
             controls = controls.fill("-", start, 3)
           }
+          let line1 = p["line1"] || p.name
+          let line2 = p["line2"] || ""
           return [
-            p.name,
-            "",
+            line1,
+            line2,
             controls
           ]
         })
