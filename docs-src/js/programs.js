@@ -919,6 +919,7 @@ var programs = [
     categories: ["Other"],
     controls: ["Attack rate", "-", "-"],
     file: "slowgear-2.spn",
+    description: "This may be a bit glitchy.",
   },
   {
     id: "cj",
