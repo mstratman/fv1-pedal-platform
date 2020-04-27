@@ -192,6 +192,7 @@ var programs = [
   {
     id: "as",
     name: "Phase shifter",
+    fav: true,
     categories: ["Phaser"],
     controls: ["Reverb", "Rate", "Width"],
     file: "spinsemi/GA_DEMO_PHASE.spn",
@@ -796,8 +797,9 @@ var programs = [
   {
     id: "bS",
     name: "Slocum Phase Shifter",
+    fav: true,
     description: "I really enjoy using this. It's a good, solid phaser, but can really turn up its personality if you crank up the width and add more stages.",
-    categories: ["Phase", "Wild"],
+    categories: ["Phaser", "Wild"],
     file: "slocum-phaser.spn",
     controls: ["Phase rate", "Sweep width", "Number of stages"],
   },
