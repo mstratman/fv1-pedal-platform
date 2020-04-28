@@ -282,7 +282,7 @@ var programs = [
   },
   {
     id: "aD",
-    name: "Plate Reverb",
+    name: "Plate Reverb: Lush",
     description: "Lush (large), characterized by very high density, explosive initial sound, large",
     categories: ["Reverb"],
     controls: ["Reverb time", "Low freq loss", "High freq loss"],
