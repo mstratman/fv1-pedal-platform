@@ -125,10 +125,10 @@ function htmlProd() {
     .pipe(gulp.dest('../docs/'));
 }
 
-function img() {
+function staticFiles() {
   return gulp
-    .src("./img/**/*")
-    .pipe(gulp.dest("../docs/img/"));
+    .src("./static/**/*")
+    .pipe(gulp.dest("../docs/"));
 }
 
 
@@ -143,8 +143,8 @@ function watchFiles() {
 
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
-const buildProd = gulp.series(vendor, gulp.parallel(css, js, htmlProd, img));
-const buildDev = gulp.series(vendor, gulp.parallel(css, js, htmlDev, img));
+const buildProd = gulp.series(vendor, gulp.parallel(css, js, htmlProd, staticFiles));
+const buildDev = gulp.series(vendor, gulp.parallel(css, js, htmlDev, staticFiles));
 const watch = gulp.series(buildDev, gulp.parallel(watchFiles, browserSyncStart));
 
 // Export tasks
