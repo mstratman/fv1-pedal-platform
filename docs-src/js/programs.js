@@ -776,7 +776,7 @@ var programs = [
     id: "bM",
     name: "Reverse delay",
     description: "Simplified part of A+ Paradox delay",
-    controls: ["-", "Delay", "Feedback"],
+    controls: ["-", "Feedback", "Delay"],
     categories: ["Delay","Wild"],
     file: "afx_reverse_delay.spn",
   },
