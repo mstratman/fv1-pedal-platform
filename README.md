@@ -2,6 +2,17 @@
 
 This repository contains everything you need to build the [Mimir's Well](https://mas-effects.com) guitar pedal.
 
+Directories:
+
+* `arduino`: code for the display driver, and for writing the "yellow" EEPROMs
+* `assembly`: documents to help people building from a [kit or PCB](https://mas-effects.square.site/shop/diy/5)
+* `eeprom-helper`: simple tool to help when creating EEPROMs. see its README 
+* `pcb`: gerber and dxf files, e.g. if you want to produce your own PCB
+* `schematics`: schematics
+* `v1`: a one-off prototype (which is now my most-used pedal)
+* `docs`: [mas-effects.com](https://mas-effects.com)
+* `docs-src`: source for [mas-effects.com](https://mas-effects.com)
+
 ## Writing EEPROMs
 
 The pedal has 2 pairs of EEPROMs. Each pair contains a bank of 8 programs, and has a "Yellow" EEPROM and a "Blue" EEPROM.  The colors aren't significant, and just refer to the color I use when writing each chip's number on it. It's a simple way to avoid getting them mixed up.
