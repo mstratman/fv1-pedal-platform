@@ -4,10 +4,18 @@
   background-color: #fff700;
 }
 
+.mimirs-well-masthead {
+  background-image: url('../img/header-mw-bg.jpg');
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: center center;
+  background-size: cover;
+}
+
 .anchor {
   display: block;
   position: relative;
-  top: -250px;
+  top: -120px;
   visibility: hidden;
 }
 
@@ -23,6 +31,10 @@
 .bg-teal {
   background-color: #83d3c9;
   color: #fff;
+}
+
+.bigger {
+  font-size: 1.5rem;
 }
 
 .navbar-brand {
@@ -54,6 +66,67 @@
   border: 2px solid #f7f17e;
   background-color: #fcfbe0;
   padding: 2rem;
+}
+
+.faq {
+  h5 {
+    span {
+      font-weight: normal;
+      font-size: 1rem;
+    }
+  }
+  .faq-img {
+    max-height: 200px;
+  }
+}
+
+.control-labels {
+  li {
+    padding-left: 1.1rem;
+  }
+}
+
+.version-comparison {
+  background-color: #c4c4c4;
+
+  .comparison-cell {
+    background-color: #fff;
+
+    .which-pedal {
+      font-style: italic;
+      @include serif-font;
+      text-align: center;
+    }
+
+    img {
+      max-height: 200px;
+      bottom: 0;
+    }
+
+    p {
+      padding: 1rem;
+    }
+
+    .price {
+      padding-top: 1rem;
+      text-align: center;
+    }
+
+    .audience, .audience h4 {
+      text-align: center;
+      background-color: #6b95bf;
+      color: #fff;
+      font-weight: 300;
+      padding-top: 0.2rem;
+      padding-bottom: 0.1rem;
+
+      &.flagship {
+        background-color: #41A682;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+    }
+  }
 }
 
 .program-list {
@@ -138,4 +211,8 @@ td.details {
 }
 .cart-trigger-enter, .cart-trigger-leave-to {
   transform: translateY(150px) !important;
+}
+
+.other-pedal-thumbnail {
+  max-height: 300px;
 }

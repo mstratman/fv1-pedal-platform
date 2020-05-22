@@ -1,111 +1,105 @@
 <% set title="Mimir's Well: Guitar Pedal Platform powered by the FV-1 DSP" %>
-<% extends "partials/template.html" %>
+<% extends "partials/_template.html" %>
 
 <% block body %>
-  <section class="page-section bg-dark text-white">
+  <section class="page-section bg-dark text-white mimirs-well-masthead">
     <div class="container">
       <div class="row">
         <div class="col text-center mt-3">
           <h1 class="text-uppercase">Mimir's Well</h2>
           <div class="intro-lead-in">FV-1 DSP Pedal Platform</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="page-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-md-6 col-lg-8 order-2 order-md-1">
-          <p><strong>Mimir's Well</strong> is a guitar pedal powered by the extremely popular <em>FV-1 DSP</em> (digital signal processor). It allows you to run audio processing programs that create amazing reverb, delay, pitch, and plenty of other effects. Some programs provide a <strong>single effect</strong> with controls to dial in their details, while other programs <strong>layer multiple effect types</strong> to create unique and interesting soundscapes.</p>
-          <p>This is the same chip that powers pedals such as the EQD Rainbow Machine and Dispatch Master, EHX Holy Stain, Walrus Arp 87 and Fathom,  Black Hole Symmetry, and tons more.</p>
-          <p>While those other pedals are standalone, each running only one program (or using a selector knob to toggle between a few similar programs), Mimir's Well lets you load <strong>up to 16 custom programs</strong> you can switch between, in addition to the 7 great, built-in effects. </p>
-
-          <div class="text-center">
-            <a class="btn btn-primary" href="https://mas-effects.square.site/product/mimirs-well/2?cp=true&sa=false&sbp=false&q=false&category_id=3" target="_blank">Buy Now</a>
+          <div class="mt-5 text-center">
+            <a target="_blank" href="https://mas-effects.square.site/product/mimirs-well/2?cp=true&sa=false&sbp=false&q=false&category_id=3" class="btn btn-xl btn-primary">Buy Now</a>
           </div>
-
-        </div>
-        <div class="col-12 col-md-6 col-lg-4 order-1 order-md-2">
-          <a target="_blank" href="/img/cover1.jpg">
-            <img class="img-fluid" src="/img/cover1-reduced.jpg" alt="Mimir's Well - FV-1 DSP Pedal Platform" />
-          </a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="page-section bg-light">
-    <div class="container">
-      <div class="row">
-        <div class="col text-center">
-          <h2 class="section-heading text-uppercase">More Details To Come...</h2>
-          <h3 class="section-subheading text-muted">(this site is a work in progress)</h3>
-          <p>More info coming soon. <a href="mailto:mark@mas-effects.com">Email me</a> to get notified when this site is updated.</p>
-          <p>In the meantime, you can <a target="_blank" href="https://mas-effects.square.site/product/mimirs-well/2?cp=true&sa=false&sbp=false&q=false&category_id=3">purchase now in the online store</a>.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-        </div>
-      </div>
-    </div>
-  </section>
+  <div id="top" class="anchor"></div>
 
-  <!--
-  <section class="page-section bg-light">
+  <section class="page-section">
     <div class="container">
-      <div class="row">
-        <div class="col text-center">
-          <h2 class="section-heading text-uppercase">How It Works</h2>
-          <h3 class="section-subheading text-muted">(the quick and simple explanation)</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p class="TODO">blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
-          <p class="TODO">blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
-          <p class="TODO">blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
-          <p class="TODO">blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</p>
-        </div>
+      <h2 class="section-heading text-uppercase text-center">Walkthrough</h2>
+      <h5 class="section-subheading text-muted text-center">What are the controls? What does it look like?</h5>
+      <% include "partials/labels.html" %>
+      <div class="mt-3">
+        <% include "partials/gallery.html" %>
       </div>
     </div>
   </section>
 
   <section class="page-section">
     <div class="container">
+      <h2 class="section-heading text-uppercase text-center">Overview</h2>
+      <h5 class="subheading text-muted text-center mb-3">23 Pedals in One Enclosure</h5>
+      <% include "partials/mimirs-well-intro.html" %>
+    </div>
+  </section>
+
+  <a class="anchor" id="built-in-patches"></a>
+  <section class="page-section bg-light">
+    <div class="container">
+      <h2 class="section-heading text-uppercase text-center">Patches</h2>
+      <h5 class="section-subheading text-muted text-center">What sounds can you make?</h5>
+      <% include "partials/patches.html" %>
+    </div>
+  </section>
+
+
+  <section class="page-section version-comparison">
+    <div class="container">
+      <h2 class="section-heading text-uppercase text-center">3 Versions</h2>
+      <% include "partials/versions.html" %>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container">
+      <h2 class="section-heading text-uppercase text-center">Perfect for...</h2>
+      <% include "partials/use-cases.html" %>
+    </div>
+  </section>
+
+  <section class="page-section bg-light">
+    <div class="container">
+      <h2 class="section-heading text-uppercase text-center">Free and Open Source</h2>
+      <% include "partials/oss.html" %>
+    </div>
+  </section>
+
+  <section class="page-section">
+    <div class="container">
+      <h2 class="section-heading text-uppercase text-center">FAQ</h2>
+      <% include "partials/faq.html" %>
+    </div>
+  </section>
+
+  <section class="page-section bg-light">
+    <div class="container">
       <div class="row">
         <div class="col text-center">
-          <h2 class="section-heading text-uppercase">TODO</h2>
+          <#
+          <h2 class="section-heading text-uppercase">How It Works</h2>
+          <h5 class="section-subheading text-muted">(the quick and simple explanation)</h5>
+          #>
+          <h2 class="section-heading text-uppercase">Swapping Banks</h2>
         </div>
       </div>
+      <a class="anchor" id="swap-banks"></a>
+      <% include "partials/swap-banks.html" %>
+    </div>
+  </section>
+
+  <section class="page-section bg-light">
+    <div class="container">
       <div class="row">
-        <div class="col">
-          <ul>
-            <li>Many of the pedals on your board may have similar or idental circuitry to each other, with the only important difference being the programs running on their FV-1 chips. 
-            </li>
-            <li>...</li>
-          </ul>
+        <div class="col text-center">
+          <a href="#top" class="btn btn-lg btn-outline-primary">Back to Top</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="page-section" id="use-cases">
-    <div class="container">
-      <div class="row">
-        <div class="col text-center">
-          <h2 class="section-heading text-uppercase">Find Your Perfect Sound</h2>
-          <h3 class="section-subheading text-muted">Whether you want 23 great programs, or 1 perfect program, this is the pedal for you</h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <p class="TODO">Expand on the Connoisseur, SPecialist, and Tinkerer from the home page</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  -->
 
 <% endblock %>

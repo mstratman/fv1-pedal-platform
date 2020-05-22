@@ -1,12 +1,12 @@
-<% set title="Programs for the FV-1 guitar pedal, Mimir's Well" %>
-<% extends "partials/template.html" %>
+<% set title="Bank Builder for Mimir's Well, FV-1 guitar pedal" %>
+<% extends "partials/_template.html" %>
 
 <% block body %>
   <section class="page-section bg-dark text-white">
     <div class="container">
       <div class="row">
         <div class="col text-center mt-3">
-          <h1 class="text-uppercase">Programs for Mimir's Well</h2>
+          <h1 class="text-uppercase">Patches for Mimir's Well</h2>
           <div class="intro-lead-in">Bank Builder</div>
         </div>
       </div>
@@ -19,9 +19,9 @@
 
       <div class="row">
         <div class="col-12">
-          <h2>Bank Builder: Program Selection</h2>
-          <p>Your Mimir's Well pedal is 23 pedals in one. You can even <a href="https://mas-effects.square.site/product/bank-of-8-extra-programs-for-mimir-s-well/4?cp=true&sa=true&sbp=false&q=false" target="_blank">buy extra banks (only $2/each)</a> to expand your collection.
-          It comes with <a href="#rom-programs" @click="showRom = !showRom">7 great built-in programs <small>(click to view)</small></a>, and you can <strong>use this page to choose up to 16 more</strong> custom ones.</p>
+          <h2>Bank Builder: Patch Selection</h2>
+          <p>Your Mimir's Well pedal is 23 pedals in one. You can even <a href="https://mas-effects.square.site/product/bank-of-8-extra-programs-for-mimir-s-well/4?cp=true&sa=true&sbp=false&q=false" target="_blank">buy extra banks (only $1/patch)</a> to expand your collection.
+          It comes with <a href="#rom-programs" @click="showRom = !showRom">7 great built-in patches <small>(click to view)</small></a>, and you can <strong>use this page to choose up to 16 more</strong> custom ones.</p>
           <p>Feel free to pick more than 16, but just be sure to buy the extra bank(s) to hold them.</p>
         </div>
       </div>
@@ -46,8 +46,8 @@
         <div class="col-12">
           <h4 class="text-muted">Advanced</h4>
           <h6 class="text-muted">Even more banks</h6>
-          <p>You can find even more programs by going to this master list: <a target="_blank" href="https://mstratman.github.io/fv1-programs/">https://mstratman.github.io/fv1-programs/</a>.</p>
-          <p>Alternatively, if you find or make other programs you'd like added to your banks, that's not a problem.</p>
+          <p>You can find even more patches by going to this master list: <a target="_blank" href="https://mstratman.github.io/fv1-programs/">https://mstratman.github.io/fv1-programs/</a>.</p>
+          <p>Alternatively, if you find or make other patches you'd like added to your banks, that's not a problem.</p>
           <p>Simply <a href="mailto:mark@mas-effects.com">email mark@mas-effects.com</a> and I'll use them when making your EEPROMs.</p>
           <h6 class="text-muted">Burn your own EEPROMs</h6>
           <p>I've also posted some instructions to help you flash your own EEPROM banks: <a href="https://github.com/mstratman/fv1-pedal-platform/blob/master/README.md" target="_blank">https://github.com/mstratman/fv1-pedal-platform/blob/master/README.md</a></p>
@@ -65,7 +65,7 @@
           <p>Using this page on a small screen is not recommended, as it'll be very hard to view the table below to compare programs. I recommend using a computer or tablet instead of a mobile phone.</p>
           <p>This page should still work fine if you continue, but be sure to <strong>scroll left and right</strong> on the table to see all 3 controls for each program.</p>
           -->
-          <p>Be sure to <strong>scroll left and right</strong> on the table to see all 3 controls for each program. <small>(Or use a computer with a bigger screen)</small></p>
+          <p>Be sure to <strong>scroll left and right</strong> on the table to see all 3 controls for each patch. <small>(Or use a computer with a bigger screen)</small></p>
         </div>
       </div>
 
@@ -86,10 +86,10 @@
             </small>
           </div>
 
-          <a id="rom-programs" class="anchor"></a>
+          <a id="rom-programs" name="rom-programs" class="anchor"></a>
           <div class="category">
             <div class="category-heading" @click="showRom = !showRom" :class="{open: showRom}">
-              <h3 class="link">Built-in Programs</h3>
+              <h3 class="link">Built-in Patches</h3>
             </div>
           </div>
           <div class="table-responsive" v-show="showRom">
@@ -177,7 +177,7 @@
           <i class="fas fa-shopping-basket"></i>
           <span class="count">{{numPrograms}}</span>
           <template v-if="false">
-            programs
+            patches
             <br>
             <span class="count">{{numBanks}}</span>
             bank<template v-if="numBanks > 1">s</template>
@@ -207,7 +207,7 @@
           <!-- bank placeholder to indicate you can get more than just the one(s) you already have -->
           <div v-show="numSlotsLeft == 0">
             <h6>Bank {{numBanks + 1}}</h6>
-            <small><em>Add more programs if you need another bank</em></small>
+            <small><em>Add more patches if you need another bank</em></small>
           </div>
 
         </div>
@@ -220,7 +220,7 @@
               Bank {{Math.ceil(numPrograms / 8)}}
               can <small><em>(optionally)</em></small> hold
               {{numSlotsLeft}}
-              more programs
+              more patches
             </div>
 
             <p>

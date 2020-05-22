@@ -30,7 +30,7 @@ h6 {
 }
 
 .page-section {
-  padding: 90px 0;
+  padding: 60px 0;
 }
 
 .page-section h2.section-heading {
@@ -39,7 +39,7 @@ h6 {
   margin-bottom: 15px;
 }
 
-.page-section h3.section-subheading {
+.page-section h3.section-subheading, .page-section h4.section-subheading, .page-section h5.section-subheading, .page-section h6.section-subheading {
   font-size: 16px;
   font-weight: 400;
   font-style: italic;
