@@ -15,7 +15,7 @@ Directories:
 
 ## Writing EEPROMs
 
-The pedal has 2 pairs of EEPROMs. Each pair contains a bank of 8 programs, and has a "Yellow" EEPROM and a "Blue" EEPROM.  The colors aren't significant, and just refer to the color I use when writing each chip's number on it. It's a simple way to avoid getting them mixed up.
+The pedal has 2 pairs of 24LC32A EEPROMs. Each pair contains a bank of 8 programs, and has a "Yellow" EEPROM and a "Blue" EEPROM.  The colors aren't significant, and just refer to the color I use when writing each chip's number on it. It's a simple way to avoid getting them mixed up.
 
 There are lots of ways to write to EEPROMs, and this is only one of them.
 
