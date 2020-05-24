@@ -671,6 +671,7 @@ var programs = [
     id: "bC",
     name: "Spring Reverb + Tremolo",
     fav: true,
+    description: "You can cut the tremolo depth if you want just a good, spring reverb",
     categories: ["Tremolo", "Reverb"],
     controls: ["Reverb", "Rate", "Depth"],
     file: "spring_verb.spn",
@@ -823,7 +824,7 @@ var programs = [
     id: "bV",
     name: "Digifuzzer",
     fav: true,
-    categories: ["Distortion"],
+    categories: ["Distortion", "Wild"],
     controls: ["Sample rate reduction", "Bit depth + distortion", "Volume"],
     file: "slacker-bf/bf_digifuzzer.spn",
   },
@@ -841,10 +842,13 @@ var programs = [
     controls: ["Rate", "Depth", "Regen"],
     file: "drolo/envelope-phaser.spn",
   },
-  {// TODO...
+  {
     id: "bY",
-    name: "Filter: env LP HP up",
-    categories: ["Other"],
+    name: "Filter: Env, LP, HP, Up",
+    fav: true,
+    description: "This is a pretty good auto-wah that lets you tweak filter types for different flavors.",
+    controls: ["Sensitivity", "Filter Type", "Volume"],
+    categories: ["Other", "Filter"],
     file: "drolo/filter-env-LP-HP-up.spn",
   },
   {
