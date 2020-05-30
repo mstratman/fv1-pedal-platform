@@ -824,7 +824,7 @@ var programs = [
     id: "bV",
     name: "Digifuzzer",
     fav: true,
-    categories: ["Distortion", "Wild"],
+    categories: ["Distortion", "Other", "Wild"],
     controls: ["Sample rate reduction", "Bit depth + distortion", "Volume"],
     file: "slacker-bf/bf_digifuzzer.spn",
   },
