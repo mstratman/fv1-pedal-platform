@@ -1,11 +1,22 @@
 <template>
   <div id="app">
     <h2>Choose 1-8 programs</h2>
-    <label><input v-model="showFile" type="checkbox">  Show filename</label>
 
-    <div>
-      <label for="filter">Filter: <input type="text" id="filter" v-model="filter"/></label>
+    <div class="setup">
+      <label><input v-model="showFile" type="checkbox">  Show filename</label>
+
+      <div>
+        <label for="filter">Filter: <input type="text" id="filter" v-model="filter"/></label>
+      </div>
+
+      <div>
+        <label for="code">Code: <input type="text" id="code" v-model="code"/></label>
+        <input type="button" v-on:click="setSelectedFromCode" value="Update Selected">
+        <input type="button" v-on:click="first8" value="(first 8)">
+        <input type="button" v-on:click="last8" value="(last 8)">
+      </div>
     </div>
+
 
     <div v-for="p in filteredPrograms" :key="p.idx">
       <label :for="`check${p.idx}`">
@@ -54,6 +65,7 @@
 
 <script>
 import programs from '../programs.js'
+import programsWithIds from '../programs-with-ids.js'
 
 function addIndex(programs) {
   let i = 0
@@ -68,9 +80,62 @@ export default {
     return {
       filter: '',
       programs: addIndex(programs),
+      code: '',
       selected: [],
       showFile: false,
     }
+  },
+
+  mounted: function() {
+    // this is an inefficient implementation. But that's okay for an internal tool, especially in 'mounted'
+    for (let i = 0; i < programsWithIds.length; i++) {
+      let fn = programsWithIds[i].file
+      let id = programsWithIds[i].id
+      let p = this.programs.find(p => {
+        return p['download'] && p['download']['spn'] && p['download']['spn']['file'] && p['download']['spn']['file'] == fn
+      })
+      if (p) {
+        p.id = id
+      } else {
+        console.log("CANNOT FIND id= ", id)
+      }
+    }
+
+  },
+
+  methods: {
+    setSelectedFromCode: function() {
+      let codes = this.code.match(/.{1,2}/g)
+      this.selected = []
+      for (let i = 0; i < codes.length; i++) {
+        let p = this.programs.find(p => {
+          return p['id'] == codes[i]
+        })
+        this.selected.push(p.idx)
+      }
+    },
+    first8: function() {
+      this.code = this.code.substr(0,16)
+      this.setSelectedFromCode()
+    },
+    last8: function() {
+      this.code = this.code.substr(-16,16)
+      this.setSelectedFromCode()
+    },
+    setCodeFromSelected: function() {
+      let code = ''
+      for (let i = 0; i < this.selected.length; i++) {
+        let p = this.programs[this.selected[i]]
+        let id = p.id || '??'
+        code += id
+      }
+      this.code = code
+    }
+  },
+  watch: {
+    selected: function() {
+      this.setCodeFromSelected()
+    },
   },
   computed: {
     filteredPrograms: function() {
@@ -213,5 +278,10 @@ void writeEEPROMPage(unsigned int address, char *data)
 }
 textarea {
   margin-top: 2rem;
+}
+.setup {
+  margin-bottom: 2rem;
+  padding: 10px;
+  border: 1px dashed #000;
 }
 </style>
