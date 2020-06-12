@@ -959,7 +959,7 @@ var app = new Vue({
     showSimpler: false,
     showAdvanced: false,
     showCartContents: false,
-    showCode: false,
+    showCode: true, // Some people were missing this and sending me a copy paste of the program names
     showCopied: false,
     showDecoder: false,
 

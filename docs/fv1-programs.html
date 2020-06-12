@@ -95,9 +95,12 @@
 
       <div class="row">
         <div class="col-12 text-center">
+          <!--
           <button class="btn btn-outline-info btn-sm" @click.prevent="showSimpler=!showSimpler"><i class="fas fa-question-circle"></i> Want something simpler?</button>
           ...or...
           <button class="btn btn-outline-info btn-sm" @click.prevent="showAdvanced=!showAdvanced"><i class="fas fa-cogs"></i> More advanced?</button>
+          -->
+          <button class="btn btn-outline-info btn-sm" @click.prevent="showAdvanced=!showAdvanced"><i class="fas fa-cogs"></i> Advanced Options</button>
         </div>
       </div>
 
@@ -289,9 +292,16 @@
               more patches
             </div>
 
+            <div>
+              <button class="btn btn-primary" @click.prevent="copyCheckoutCode">Copy Code</button>
+              <br>
+              <input id="checkout-code" type="text" :value="checkoutCode" class="form-control form-control-sm">
+              <span v-if="showCopied" class="text-success"><small>Copied!</small></span>
+            </div>
+
             <p>
               <small>
-                <strong>Copy the following code</strong>
+                <strong>Copy the code</strong>
                 and paste it into checkout when purchasing the 
                 <a target="_blank" href="https://mas-effects.square.site/product/mimirs-well/2?cp=true&sa=false&sbp=false&q=false&category_id=3">Mimir's Well</a>
                 pedal, or
@@ -299,12 +309,6 @@
               </small>
             </p>
             <p><small>You can also email this code to <a href="mailto:mark@mas-effects.com">mark@mas-effects.com</a> before or after you purchase.</small></p>
-            <div>
-              <button class="btn btn-primary" @click.prevent="copyCheckoutCode">Copy Code</button>
-              <br>
-              <input id="checkout-code" type="text" :value="checkoutCode" class="form-control form-control-sm">
-              <span v-if="showCopied" class="text-success"><small>Copied!</small></span>
-            </div>
           </div>
           <button @click.prevent="hideCart" class="btn btn-sm btn-outline-secondary">Close</button>
         </div>
