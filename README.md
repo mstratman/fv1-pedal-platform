@@ -52,7 +52,7 @@ To create these banks I do the following:
     2. `diff /tmp/eeprom.bin bank-output.bin # this should not output anything`
 
 
-[Here is a script I use for steps 2-4](https://gist.github.com/mstratman/5ede44bfd3bc87219b2a90b9920d51e1).
+[Here is a script I use for steps 2-5](https://gist.github.com/mstratman/5ede44bfd3bc87219b2a90b9920d51e1).
 
 ## "EEPROM Helper" tool
 
