@@ -47,6 +47,10 @@ To create these banks I do the following:
     1. `ch341eeprom -v -s 24c32 -e`
 4. Write the bin file
     1. `ch341eeprom -v -s 24c32 -w bank-output.bin`
+5. Check for problems. Optional but recommended
+    1. `ch341eeprom -v -s 24c32 -r /tmp/eeprom.bin # read back the data`
+    2. `diff /tmp/eeprom.bin bank-output.bin # this should not output anything`
+
 
 [Here is a script I use for steps 2-4](https://gist.github.com/mstratman/5ede44bfd3bc87219b2a90b9920d51e1).
 
