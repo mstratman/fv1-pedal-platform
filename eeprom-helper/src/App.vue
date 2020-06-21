@@ -28,7 +28,7 @@
       </label>
     </div>
 
-    <h2>Copy arduino code</h2>
+    <h2>Copy label code</h2>
     <div class="warning" v-show="selected.length>8">
       <h3>Too many programs</h3>
       You have <strong>{{selected.length}}</strong> chosen, but cannot have more than 8
@@ -42,7 +42,15 @@
       </ul>
     </div>
 
+    <div>
+    text:
+    <textarea rows="10" style="width:100%;" v-model="labelText"></textarea>
+    </div>
+
+    <div>
+    Arduino:
     <textarea rows="10" style="width:100%;" v-model="arduinoCode"></textarea>
+    </div>
 
     <h2>spn files (for reference)</h2>
     <ul>
@@ -130,7 +138,47 @@ export default {
         code += id
       }
       this.code = code
-    }
+    },
+    labelsStrings: function(stringify) {
+      let rv = this.selected.map(i => {
+        let p = this.programs[i]
+        let controls = p.controls || []
+        if (controls.length < 3) {
+          let start = controls.length
+          controls.length=3
+          controls = controls.fill("-", start, 3)
+        }
+        let line1 = p["line1"] || p.name
+        let line2 = p["line2"] || ""
+        return [
+          line1,
+          line2,
+          controls
+        ]
+      })
+      .flat(Infinity)
+      .map(l => {
+        if (stringify) {
+          return '"' + l + "\\0" + '"'
+        } else {
+          return l
+        }
+      })
+
+      if (rv.length < 8*5) {
+        if (stringify) {
+          for (let i = (rv.length/5); i < 8; i++) {
+            rv.push('"N/A\\0"', '"-\\0"', '"-\\0"', '"-\\0"', '"-\\0"')
+          }
+        } else {
+          for (let i = (rv.length/5); i < 8; i++) {
+            rv.push('"N/A"', '"-"', '"-"', '"-"', '"-"')
+          }
+        }
+      }
+
+      return rv
+    },
   },
   watch: {
     selected: function() {
@@ -157,35 +205,10 @@ export default {
         return !(p["controls"] && p["controls"].length == 3)
       })
     },
+    labelText: function() {
+      return this.labelsStrings(false).join("\n")
+    },
     arduinoCode: function() {
-      let labels = () => {
-        let rv = this.selected.map(i => {
-          let p = this.programs[i]
-          let controls = p.controls || []
-          if (controls.length < 3) {
-            let start = controls.length
-            controls.length=3
-            controls = controls.fill("-", start, 3)
-          }
-          let line1 = p["line1"] || p.name
-          let line2 = p["line2"] || ""
-          return [
-            line1,
-            line2,
-            controls
-          ]
-        })
-        .flat(Infinity)
-        .map(l => '"' + l + "\\0" + '"')
-
-        if (rv.length < 8*5) {
-          for (let i = (rv.length/5); i < 8; i++) {
-            rv.push('"N/A\\0"', '"-\\0"', '"-\\0"', '"-\\0"', '"-\\0"')
-          }
-        }
-
-        return rv
-      }
       return `
 #include <Wire.h>
 
@@ -203,7 +226,7 @@ export default {
 #define NUM_PROGRAMS 8 // 8 programs per bank
 #define NUM_BANKS 1   // one bank per eeprom. V1 of the pedal also stored the internal ROM bank on here.
 char *labels[] = {
-  ${labels().join(",\n")}
+  ${this.labelsStrings(true).join(",\n")}
 };
 
 

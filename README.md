@@ -21,12 +21,18 @@ There are lots of ways to write to EEPROMs, and this is only one of them.
 
 ### Yellow
 
-This holds the program name and control labels for each program in the bank.
-I write it using an [Arduino sketch](/arduino/eeprom/eeprom.ino). You can hook it up as follows:
+This holds the program name and control labels for each program in the bank. I use this [EEPROM Helper](https://github.com/mstratman/fv1-pedal-platform/tree/master/eeprom-helper) script to make the label text file, or the arduino file.
+
+#### Using an EEPROM programmer:
+
+You can write to it using these shell scripts: [burn-labels.sh and make-labels.sh](https://gist.github.com/mstratman/d541932adb592097963afa8c9aeca4c1).
+
+####  Using an arduino:
+
+You can also write it using an [Arduino sketch](/arduino/eeprom/eeprom.ino). You can hook it up as follows:
 
 ![connecting EEPROM to Arduino for writing](/v1/schematics/eeprom%20prgramming_bb.png)
 
-If you decide to write it another way, that's fine, just look at the Arduino sketch to see how we're storing the data: 5 null-terminated strings for each program, each starting at a page boundary.
 
 ### Blue
 
@@ -60,5 +66,5 @@ To help streamline this process I have a really simple tool I use: [eeprom helpe
 
 It's just a simple javascript page that lets me check which programs I'll be burning, then it does 2 things:
 
-1. Gives a snippet of arduino code for the burning the Yellow chip, used in the [Arduino sketch mentioned above](/arduino/eeprom/eeprom.ino)
+1. Gives a snippet of arduino code or a text list of labels for the burning the Yellow chip, described above.
 2. Lists the spn files for reference, which is helpful when manually working with SpinAsm Assembler in step 1 while burning the Blue chip.
