@@ -66,6 +66,26 @@
       </li>
     </ul>
 
+    <h2>Table of Programs (for Mimir's Horn)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Patch</th>
+          <th>Knob 1</th>
+          <th>Knob 2</th>
+          <th>Knob 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="p in selected" :key="p.idx">
+        <tr v-for="idx in selected" :key="idx">
+          <td>{{programs[idx].name}}</td>
+          <td>{{controlsForProgram(programs[idx])[0]}}</td>
+          <td>{{controlsForProgram(programs[idx])[1]}}</td>
+          <td>{{controlsForProgram(programs[idx])[2]}}</td>
+        </tr>
+      </tbody>
+    </table>
 
 
   </div>
@@ -178,6 +198,9 @@ export default {
       }
 
       return rv
+    },
+    controlsForProgram: function(p) {
+      return p.controls || ["?","?","?"]
     },
   },
   watch: {
@@ -306,5 +329,14 @@ textarea {
   margin-bottom: 2rem;
   padding: 10px;
   border: 1px dashed #000;
+}
+table {
+  border-collapse: collapse;
+}
+td, th {
+  padding: 0.65rem;
+}
+table, th, td {
+  border: 1px solid gray;
 }
 </style>
