@@ -10,8 +10,6 @@ Directories:
 * `pcb`: gerber and dxf files, e.g. if you want to produce your own PCB
 * `schematics`: schematics
 * `v1`: a one-off prototype (which is now my most-used pedal)
-* `docs`: [mas-effects.com](https://mas-effects.com)
-* `docs-src`: source for [mas-effects.com](https://mas-effects.com)
 
 ## Writing EEPROMs
 
