@@ -5,7 +5,7 @@ This repository contains everything you need to build the [Mimir's Well](https:/
 Directories:
 
 * `arduino`: code for the display driver, and for writing the "yellow" EEPROMs
-* `assembly`: documents to help people building from a [kit or PCB](https://mas-effects.square.site/shop/diy/5)
+* `assembly`: documents to help people building from a [kit or PCB](https://shop.mas-effects.com/collections/diy/mimirs-well)
 * `eeprom-helper`: simple tool to help when creating EEPROMs. see its README 
 * `pcb`: gerber and dxf files, e.g. if you want to produce your own PCB
 * `schematics`: schematics
