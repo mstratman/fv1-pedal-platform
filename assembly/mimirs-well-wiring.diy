@@ -16816,6 +16816,24 @@ j7sWAAAAUEYoYAEAAAAAAAAAUOLi6zsuNL73r5IukSQZDcnq2Ed0jUoaPuZjGcn0H/+Kts9aHVWq
       <striped>false</striped>
       <stripeColor hex="ffff00"/>
     </diylc.connectivity.HookupWire>
+    <diylc.connectivity.HookupWire>
+      <name>W13</name>
+      <alpha>127</alpha>
+      <controlPoints2>
+        <point x="4.045" y="4.955"/>
+        <point x="4.04" y="5.165"/>
+        <point x="3.94" y="5.365"/>
+        <point x="4.4" y="5.505"/>
+      </controlPoints2>
+      <color hex="000000"/>
+      <pointCount>FOUR</pointCount>
+      <style>SOLID</style>
+      <smooth>true</smooth>
+      <lastUpdatePointIndex>-1</lastUpdatePointIndex>
+      <gauge>_22</gauge>
+      <striped>false</striped>
+      <stripeColor hex="ffff00"/>
+    </diylc.connectivity.HookupWire>
     <diylc.misc.Label>
       <name>L1</name>
       <point x="6.4" y="2.4"/>
