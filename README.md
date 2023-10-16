@@ -1,6 +1,6 @@
 # Mimir's Well
 
-This repository contains everything you need to build the [Mimir's Well](https://mas-effects.com/mimirs-well/) guitar pedal.
+This repository contains everything you need to build the [Mimir's Well](https://mas-effects.com/mimirs-well/) guitar pedal. You can build it from a [kit or PCB](https://shop.mas-effects.com/collections/diy/mimirs-well).
 
 Directories:
 
